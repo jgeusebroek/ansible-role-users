@@ -29,15 +29,16 @@ Example Variables
         uid: 1020
         name: "Hello World"
         upload_key: true
+
+    users_deleted:
+      - barfoo
+
     users_groups_available:
       - groupname: admin
         gid: 1050
       - groupname: sysgroup
         gid: 801
         is_system_group: true
-
-    users_disabled:
-      - barfoo
 
     users_groups_deleted:
       - deleteme
