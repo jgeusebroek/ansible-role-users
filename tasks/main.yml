@@ -47,9 +47,11 @@
   when: users_available is defined
   tags: users
 
+# TODO:
+# Check for running processes (ps -u {{ item.username }}) and prompt to kill them if there are running processes (pkill -u {{ item.username }})
 - name: remove users
   user:
-    name: '{{ item }}'
+    name: '{{ item.username }}'
     state: absent
     remove: yes
   with_items: users_deleted
@@ -58,7 +60,7 @@
 
 - name: remove groups for users
   group:
-    name: '{{ item }}'
+    name: '{{ item.username }}'
     state: absent
   with_items: users_deleted
   when: users_deleted is defined
