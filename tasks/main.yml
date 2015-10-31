@@ -54,7 +54,7 @@
     remove: yes
   with_items: users_deleted
   when: users_deleted is defined
-  tags: users
+  tags: [ "users", "removeusers" ]
 
 - name: remove groups for users
   group:
@@ -62,7 +62,7 @@
     state: absent
   with_items: users_deleted
   when: users_deleted is defined
-  tags: users
+  tags: [ "users", "removeusers" ]
 
 - name: force homedir permissions
   file:
