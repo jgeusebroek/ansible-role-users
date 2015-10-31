@@ -60,6 +60,15 @@
   when: users_deleted is defined
   tags: users
 
+- name: force homedir permissions
+  file:
+    path={{ item.homedir if item.homedir is defined else users_default_homedir + "/" + item.username }}
+    owner={{ item.homedir_owner if item.homedir_owner is defined else item.username }}
+    group={{ item.homedir_group if item.homedir_group is defined else item.username }}
+    mode={{ item.homedir_perm if item.homedir_perm is defined else users_default_homedir_perm }}
+  with_items: users_available
+  tags: users
+
 - name: set authorized_keys for users (using name username)
   authorized_key:
     user: '{{ item.username }}'

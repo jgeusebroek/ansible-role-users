@@ -13,6 +13,10 @@ users_move_homedirs: true
 
 # this wil result in "/home/username"
 users_default_homedir: "/home"
+
+# default user homedir permissions
+users_default_homedir_perm: "0750"
+
 users_default_shell: /bin/bash
 
 users_default_pubkey_location: "../../files/pubkeys/"
