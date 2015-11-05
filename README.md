@@ -1,32 +1,32 @@
-Users
-=========
+# Ansible role: ca_certs
 
-Manage system user accounts and groups
+Manage system user accounts and groups. Tested on RedHat/CentOS or Debian/Ubuntu but should work for most Linux distributions / flavours.
 
-Requirements
-------------
+## Requirements
 
 None
 
-Example Playbook
-----------------
+## Dependencies
+
+None
+
+## Example Playbook
 
     - hosts: servers
       roles:
-         - { role: jgeusebroek.users }
+         - { role: jgeusebroek.users, tags: ["users"] }
 
-Example Variables
-----------------
+## Example Variables
 
     users_available:
-      - username: foobar
-        uid: 1010
-        name: "Foo Bar"
+      - username: foo
+        uid: 1001
+        name: "Foo"
         upload_key: true
-        home_dir: "/var/www/bla"
-        auth_file: "foobar.pub"
-      - username: helloworld
-        uid: 1020
+        home_dir: "/var/www/foo"
+        auth_file: "foo.pub"
+      - username: bar
+        uid: 1002
         name: "Hello World"
         upload_key: true
 
@@ -43,13 +43,10 @@ Example Variables
     users_groups_deleted:
       - deleteme
 
-License
--------
+## License
 
-BSD
+MIT / BSD
 
-Author Information
-------------------
+## Author Information
 
-Jeroen Geusebroek
-me@jeroengeusebroek.nl
+This role was created in 2015 by [Jeroen Geusebroek](http://jeroengeusebroek.nl/).
