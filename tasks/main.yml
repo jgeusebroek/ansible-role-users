@@ -1,7 +1,6 @@
 ---
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
-  tags: users
 
 - name: create groups
   group:
@@ -10,7 +9,6 @@
     system="{{ 'yes' if item.is_system_group is defined else 'no' }}"
   with_items: users_groups_available
   when: users_groups_available is defined
-  tags: users
 
 - name: remove groups
   group:
@@ -18,7 +16,6 @@
     state: absent
   with_items: users_groups_deleted
   when: users_groups_deleted is defined
-  tags: users
 
 - name: create groups for users
   group:
@@ -27,7 +24,6 @@
     system="{{ 'yes' if item.is_system_user is defined else 'no' }}"
   with_items: users_available
   when: users_available is defined
-  tags: users
 
 - name: create users
   user:
@@ -45,7 +41,6 @@
     system="{{ 'yes' if item.is_system_user is defined else 'no' }}"
   with_items: users_available
   when: users_available is defined
-  tags: users
 
 # TODO:
 # Check for running processes (ps -u {{ item.username }}) and prompt to kill them if there are running processes (pkill -u {{ item.username }})
@@ -56,7 +51,6 @@
     remove: yes
   with_items: users_deleted
   when: users_deleted is defined
-  tags: [ "users", "removeusers" ]
 
 - name: remove groups for users
   group:
@@ -64,7 +58,6 @@
     state: absent
   with_items: users_deleted
   when: users_deleted is defined
-  tags: [ "users", "removeusers" ]
 
 - name: force homedir permissions
   file:
@@ -73,7 +66,6 @@
     group={{ item.homedir_group if item.homedir_group is defined else item.username }}
     mode={{ item.homedir_perm if item.homedir_perm is defined else users_default_homedir_perm }}
   with_items: users_available
-  tags: users
 
 - name: set authorized_keys for users (using name username)
   authorized_key:
@@ -81,7 +73,6 @@
     key: '{{ lookup("file", users_default_pubkey_location + item.username + ".pub") }}'
   with_items: users_available
   when: users_available is defined and users_create_homedirs and item.upload_key and not item.auth_file
-  tags: users
 
 - name: set authorized_keys for users (using auth_file)
   authorized_key:
@@ -89,4 +80,3 @@
     key: '{{ lookup("file", users_default_pubkey_location + item.auth_file) }}'
   with_items: users_available
   when: users_available is defined and users_create_homedirs and item.upload_key and item.auth_file
-  tags: users
