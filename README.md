@@ -1,4 +1,4 @@
-# Ansible role: ca_certs
+# Ansible role: users
 
 Manage system user accounts and groups. Tested on RedHat/CentOS or Debian/Ubuntu but should work for most Linux distributions / flavours.
 
@@ -17,21 +17,23 @@ None
          - { role: jgeusebroek.users, tags: ["users"] }
 
 ## Example Variables
+	# The location where the pubkeys can be found.
+	users_default_pubkey_location: '{{ playbook_dir }}/files/pubkeys/{{ inventory_hostname }}/'
 
     users_available:
       - username: foo
         uid: 1001
         name: "Foo"
-        upload_key: true
         home_dir: "/var/www/foo"
-        auth_file: "foo.pub"
+        upload_key: true
+        auth_file: "foocustom.pub" # define specific pubkey file (otherwise it will assume username.pub)
       - username: bar
         uid: 1002
         name: "Hello World"
         upload_key: true
 
     users_deleted:
-      - barfoo
+      - username: barfoo
 
     users_groups_available:
       - groupname: admin
