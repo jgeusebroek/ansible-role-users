@@ -2,49 +2,71 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
 
-- name: create groups
+- name: Add groups
   group:
-    name='{{ item.groupname }}'
-    gid='{{ item.gid if item.gid }}'
-    system="{{ 'yes' if item.is_system_group is defined else 'no' }}"
+    name: '{{ item.groupname }}'
+    gid: '{{ item.gid if item.gid }}'
+    system: '{{ "yes" if item.is_system_group is defined else "no" }}'
   with_items: users_groups_available
   when: users_groups_available is defined
 
-- name: remove groups
+- name: Add groups for users
+  group:
+    name: '{{ item.username }}'
+    gid: '{{ item.uid }}'
+    system: '{{ "yes" if item.is_system_user is defined else "no" }}'
+  with_items: users_available
+  when: users_available is defined
+
+- name: Add users
+  user:
+    name: '{{ item.username }}'
+    uid: '{{ item.uid if item.uid }}'
+    comment: '{{ item.name if item.name is defined else ""}}'
+    group: '{{ item.username }}'
+    groups: '{{ item.groups|join(",") if item.groups is defined else ""}}'
+    home: '{{ item.homedir if item.homedir is defined else users_homedir + "/" + item.username }}'
+    move_home: '{{ "yes" if users_move_homedirs else "no" }}'
+    shell: '{{ item.shell if item.shell is defined else users_shell }}'
+    createhome: '{{ "yes" if users_create_homedirs else "no" }}'
+    password: '{{ item.password if item.password is defined else "!" }}'
+    update_password: '{{ item.update_password if item.update_password is defined else users_update_password }}'
+    system: '{{ "yes" if item.is_system_user is defined else "no" }}'
+  with_items: users_available
+  when: users_available is defined
+
+- name: Force homedir permissions
+  file:
+    path: '{{ item.homedir if item.homedir is defined else users_homedir + "/" + item.username }}'
+    owner: '{{ item.homedir_owner if item.homedir_owner is defined else item.username }}'
+    group: '{{ item.homedir_group if item.homedir_group is defined else item.username }}'
+    mode: '{{ item.homedir_perm if item.homedir_perm is defined else users_homedir_perm }}'
+  with_items: users_available
+
+- name: Set authorized_keys for users (using name username)
+  authorized_key:
+    user: '{{ item.username }}'
+    key: '{{ lookup("file", users_pubkey_location + item.username + ".pub") }}'
+  with_items: users_available
+  when: users_available is defined and users_create_homedirs and item.upload_key and item.auth_file is undefined
+
+- name: Set authorized_keys for users (using auth_file)
+  authorized_key:
+    user: '{{ item.username }}'
+    key: '{{ lookup("file", users_pubkey_location + item.auth_file) }}'
+  with_items: users_available
+  when: users_available is defined and users_create_homedirs and item.upload_key and item.auth_file
+
+- name: Remove groups
   group:
     name: '{{ item }}'
     state: absent
   with_items: users_groups_deleted
   when: users_groups_deleted is defined
 
-- name: create groups for users
-  group:
-    name='{{ item.username }}'
-    gid='{{ item.uid }}'
-    system="{{ 'yes' if item.is_system_user is defined else 'no' }}"
-  with_items: users_available
-  when: users_available is defined
-
-- name: create users
-  user:
-    name='{{ item.username }}'
-    uid='{{ item.uid if item.uid }}'
-    comment='{{ item.name if item.name is defined else ""}}'
-    group='{{ item.username }}'
-    groups='{{ item.groups|join(",") if item.groups is defined else ""}}'
-    home="{{ item.homedir if item.homedir is defined else users_default_homedir + "/" + item.username }}"
-    move_home="{{ 'yes' if users_move_homedirs else 'no' }}"
-    shell='{{ item.shell if item.shell is defined else users_default_shell }}'
-    createhome='{{ 'yes' if users_create_homedirs else 'no' }}'
-    password="{{ item.password if item.password is defined else '!' }}"
-    update_password='{{ item.update_password if item.update_password is defined else users_default_update_password }}'
-    system="{{ 'yes' if item.is_system_user is defined else 'no' }}"
-  with_items: users_available
-  when: users_available is defined
-
 # TODO:
 # Check for running processes (ps -u {{ item.username }}) and prompt to kill them if there are running processes (pkill -u {{ item.username }})
-- name: remove users
+- name: Remove users
   user:
     name: '{{ item.username }}'
     state: absent
@@ -52,31 +74,9 @@
   with_items: users_deleted
   when: users_deleted is defined
 
-- name: remove groups for users
+- name: Remove groups for users
   group:
     name: '{{ item.username }}'
     state: absent
   with_items: users_deleted
   when: users_deleted is defined
-
-- name: force homedir permissions
-  file:
-    path={{ item.homedir if item.homedir is defined else users_default_homedir + "/" + item.username }}
-    owner={{ item.homedir_owner if item.homedir_owner is defined else item.username }}
-    group={{ item.homedir_group if item.homedir_group is defined else item.username }}
-    mode={{ item.homedir_perm if item.homedir_perm is defined else users_default_homedir_perm }}
-  with_items: users_available
-
-- name: set authorized_keys for users (using name username)
-  authorized_key:
-    user: '{{ item.username }}'
-    key: '{{ lookup("file", users_default_pubkey_location + item.username + ".pub") }}'
-  with_items: users_available
-  when: users_available is defined and users_create_homedirs and item.upload_key and not item.auth_file
-
-- name: set authorized_keys for users (using auth_file)
-  authorized_key:
-    user: '{{ item.username }}'
-    key: '{{ lookup("file", users_default_pubkey_location + item.auth_file) }}'
-  with_items: users_available
-  when: users_available is defined and users_create_homedirs and item.upload_key and item.auth_file
