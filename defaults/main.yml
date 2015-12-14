@@ -5,18 +5,19 @@ users_deleted: []
 users_groups_available: []
 users_groups_deleted: []
 
-# always will update passwords if they differ. on_create will only set the password for newly created users.
-users_default_update_password: always
+# Always will update passwords if they differ. on_create will only set the password for newly created users.
+users_update_password: always
 
 users_create_homedirs: true
 users_move_homedirs: true
 
-# this wil result in "/home/username"
-users_default_homedir: "/home"
+# This wil result in "/home/username"
+users_homedir: "/home"
 
-# default user homedir permissions
-users_default_homedir_perm: "0750"
+# User homedir permissions
+users_homedir_perm: "0750"
 
-users_default_shell: /bin/bash
+# User shell
+users_shell: /bin/bash
 
-users_default_pubkey_location: "../../files/pubkeys/"
+users_pubkey_location: '{{ playbook_dir }}/files/pubkeys/{{ inventory_hostname }}/'
