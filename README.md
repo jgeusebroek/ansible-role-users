@@ -29,6 +29,7 @@ None
         auth_file: "foocustom.pub" # define specific pubkey file (otherwise it will assume username.pub)
       - username: bar
         uid: 1002
+        gid: 1080
         name: "Hello World"
         upload_key: true
 
