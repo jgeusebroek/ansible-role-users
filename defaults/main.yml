@@ -8,9 +8,6 @@ users_groups_deleted: []
 # Always will update passwords if they differ. on_create will only set the password for newly created users.
 users_update_password: always
 
-users_create_homedirs: true
-users_move_homedirs: true
-
 # This wil result in "/home/username"
 users_homedir: "/home"
 
