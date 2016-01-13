@@ -25,7 +25,7 @@ None
         uid: 1001
         name: "Foo"
         home_dir: "/var/www/foo"
-        upload_key: true
+        upload_key: True
         auth_file: "foocustom.pub" # define specific pubkey file (otherwise it will assume username.pub)
       - username: bar
         uid: 1002
@@ -41,7 +41,7 @@ None
         gid: 1050
       - groupname: sysgroup
         gid: 801
-        is_system_group: true
+        is_system_group: True
 
     users_groups_deleted:
       - deleteme
