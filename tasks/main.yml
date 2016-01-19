@@ -25,7 +25,7 @@
     comment: '{{ item.name|default(omit) }}'
     group: '{{ item.group|default(item.username) }}'
     groups: '{{ item.groups|join(",") if item.groups is defined else omit}}'
-    home: '{{ item.homedir|default(users_homedir + "/" + item.username) }}'
+    home: '{{ item.home|default(users_homedir + "/" + item.username) }}'
     move_home: '{{ item.movehomedir|default(omit) }}'
     shell: '{{ item.shell|default(users_shell) }}'
     createhome: '{{ item.create_homedir|default("yes") }}'

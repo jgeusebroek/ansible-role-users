@@ -24,7 +24,7 @@ None
       - username: foo
         uid: 1001
         name: "Foo"
-        home_dir: "/var/www/foo"
+        home: "/var/www/foo"
         upload_key: True
         auth_file: "foocustom.pub" # define specific pubkey file (otherwise it will assume username.pub)
       - username: bar
