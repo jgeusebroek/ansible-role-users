@@ -13,7 +13,7 @@
 - name: Add groups for users
   group:
     name: '{{ item.username }}'
-    gid: '{{ item.uid|default(omit) }}'
+    gid: '{{ item.gid if item.gid is defined else item.uid|default(omit)}}'
     system: '{{ item.is_system_user|default("no") }}'
   with_items: users_available
   when: users_available is defined
