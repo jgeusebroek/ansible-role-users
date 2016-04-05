@@ -37,10 +37,10 @@
 
 - name: Force homedir permissions
   file:
-    path: '{{ item.homedir|default(users_homedir + "/" + item.username) }}'
-    owner: '{{ item.homedir_owner|default(item.username) }}'
-    group: '{{ item.homedir_group|default(item.username) }}'
-    mode: '{{ item.homedir_perm|default(users_homedir_perm) }}'
+    path: '{{ item.home|default(users_homedir + "/" + item.username) }}'
+    owner: '{{ item.home_owner|default(item.username) }}'
+    group: '{{ item.home_group|default(item.username) }}'
+    mode: '{{ item.home_perm|default(users_homedir_perm) }}'
   with_items: '{{ users_available }}'
 
 - name: Set authorized_keys for users (using name username)
