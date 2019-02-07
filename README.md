@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/jgeusebroek/ansible-role-users.svg?branch=master)](https://travis-ci.org/jgeusebroek/ansible-role-users)
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-jgeusebroek.users-blue.svg)](https://galaxy.ansible.com/jgeusebroek/users)
+
 # Ansible role: users
 
 Manage system user accounts and groups. Tested on RedHat/CentOS or Debian/Ubuntu but should work for most Linux distributions / flavours.
