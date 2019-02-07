@@ -1,0 +1,35 @@
+---
+- hosts: all
+
+  vars:
+    users_pubkey_location: '{{ playbook_dir }}/files/pubkeys/'
+
+    users_available:
+      - username: foo
+        uid: 1001
+        name: "Foo"
+        home: "/home/foobar"
+        upload_key: true
+        auth_file: "foobar.pub"
+
+      - username: bar
+        uid: 1002
+        gid: 1080
+        name: "Hello World"
+        upload_key: true
+
+    users_deleted:
+      - username: barfoo
+
+    users_groups_available:
+      - groupname: admin
+        gid: 1050
+      - groupname: sysgroup
+        gid: 801
+        is_system_group: true
+
+    users_groups_deleted:
+      - deleteme
+
+  roles:
+    - role: jgeusebroek.users

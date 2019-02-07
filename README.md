@@ -18,14 +18,14 @@ None
 
 ## Example Variables
 	# The location where the pubkeys can be found.
-	users_default_pubkey_location: '{{ playbook_dir }}/files/pubkeys/{{ inventory_hostname }}/'
+	users_pubkey_location: '{{ playbook_dir }}/files/pubkeys/{{ inventory_hostname }}/'
 
     users_available:
       - username: foo
         uid: 1001
         name: "Foo"
         home: "/var/www/foo"
-        upload_key: True
+        upload_key: true
         auth_file: "foocustom.pub" # define specific pubkey file (otherwise it will assume username.pub)
       - username: bar
         uid: 1002
@@ -41,7 +41,7 @@ None
         gid: 1050
       - groupname: sysgroup
         gid: 801
-        is_system_group: True
+        is_system_group: true
 
     users_groups_deleted:
       - deleteme
@@ -52,4 +52,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2015 by [Jeroen Geusebroek](http://jeroengeusebroek.nl/).
+This role was created in 2015 by [Jeroen Geusebroek](https://jeroengeusebroek.nl/).
